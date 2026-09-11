@@ -119,6 +119,7 @@ export function Records({
                   ? "Search order, customer or company…"
                   : "Search name, email or company…"
               }
+              maxLength={100}
             />
           </div>
           <label className="filter">
@@ -151,10 +152,39 @@ export function Records({
         ) : error ? (
           <ErrorPanel message={error} retry={() => setRevision((v) => v + 1)} />
         ) : !data?.data.length ? (
-          <Empty title="No matching records" />
+          <>
+            <Empty
+              title="No matching records"
+              text={
+                query.search || query.status !== "all"
+                  ? "Try another search or clear the filters to see all records."
+                  : role === "admin"
+                    ? "Create your first record to start this workspace."
+                    : "This workspace has no records to display yet."
+              }
+            />
+            {(query.search || query.status !== "all") && (
+              <div className="empty-actions">
+                <button
+                  className="button secondary"
+                  onClick={() => {
+                    setSearch("");
+                    setQuery({ search: "", status: "all", page: 1 });
+                  }}
+                >
+                  Clear filters
+                </button>
+              </div>
+            )}
+          </>
         ) : (
-          <div className="table-scroll">
-            <table>
+          <div
+            className="table-scroll"
+            tabIndex={0}
+            role="region"
+            aria-label={`${isOrders ? "Orders" : "Customers"} table`}
+          >
+            <table className="records-table">
               <thead>
                 <tr>
                   {(isOrders
@@ -177,21 +207,21 @@ export function Records({
                   <tr key={item.id}>
                     {isOrders ? (
                       <>
-                        <td>
+                        <td data-label="Order">
                           <strong>{(item as Order).reference}</strong>
                           <small>{(item as Order).description}</small>
                         </td>
-                        <td>
+                        <td data-label="Customer">
                           <strong>{(item as Order).customerName}</strong>
                           <small>{(item as Order).company}</small>
                         </td>
-                        <td className="money">
+                        <td className="money" data-label="Amount">
                           {currency((item as Order).amountCents)}
                         </td>
                       </>
                     ) : (
                       <>
-                        <td>
+                        <td data-label="Customer">
                           <div className="person">
                             <span className="avatar">
                               {(item as Customer).name
@@ -206,14 +236,18 @@ export function Records({
                             </div>
                           </div>
                         </td>
-                        <td>{(item as Customer).company}</td>
+                        <td data-label="Company">
+                          {(item as Customer).company}
+                        </td>
                       </>
                     )}
-                    <td>
+                    <td data-label="Status">
                       <Badge value={item.status} />
                     </td>
-                    <td className="muted nowrap">{date(item.createdAt)}</td>
-                    <td>
+                    <td className="muted nowrap" data-label="Created">
+                      {date(item.createdAt)}
+                    </td>
+                    <td data-label="Actions">
                       <div className="row-actions">
                         <button
                           disabled={role !== "admin"}

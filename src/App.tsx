@@ -17,6 +17,7 @@ import {
   Database,
   Zap,
   LoaderCircle,
+  Network,
 } from "lucide-react";
 import type { Session, View } from "./types";
 import { api, setCsrf } from "./services/api";
@@ -25,6 +26,7 @@ import { Records } from "./components/Records";
 import { IntegrationLab } from "./components/IntegrationLab";
 import { AuditLog } from "./components/AuditLog";
 import { Debugging } from "./components/Debugging";
+import { ProjectDetails } from "./components/ProjectDetails";
 import { Toast } from "./components/ui";
 const nav = [
   { id: "overview", label: "Overview", icon: LayoutDashboard },
@@ -33,6 +35,7 @@ const nav = [
   { id: "integrations", label: "Integration lab", icon: PlugZap },
   { id: "audit", label: "Audit log", icon: ClipboardList },
   { id: "debugging", label: "Debugging cases", icon: Bug },
+  { id: "architecture", label: "Architecture", icon: Network },
 ] as const;
 function Login({
   onLogin,
@@ -81,9 +84,18 @@ function Login({
             <em>Great foundations.</em>
           </h1>
           <p>
-            A working business dashboard built to make the complex feel simple.
-            Explore the interface. Inspect the engineering.
+            Customer and order management for service businesses and sales
+            teams. Explore a complete workflow, from a new customer to an
+            audited order.
           </p>
+          <div className="demo-purpose">
+            <strong>What this demo demonstrates</strong>
+            <p>
+              Full-stack operations dashboard demonstrating real-world React,
+              Node.js, REST API, PostgreSQL, role-based access and debugging
+              workflows.
+            </p>
+          </div>
           <div className="login-pillars">
             <div>
               <Database />
@@ -121,34 +133,46 @@ function Login({
             <span className="green-dot" />
             Interactive live demo
           </span>
-          <h2>Welcome to your workspace.</h2>
+          <h2>Choose a role. Try the workflow.</h2>
           <p>
-            Take a look around. Make a few changes.
-            <br />
-            Your demo data belongs to your session.
+            No sign-up needed. Select a public demo account below; its
+            credentials are already filled in.
           </p>
-          <div className="role-picker">
+          <div
+            className="role-picker"
+            role="group"
+            aria-label="Choose demo role"
+          >
             <button
               type="button"
+              aria-pressed={email === "admin@atlas.demo"}
+              disabled={busy}
               className={email === "admin@atlas.demo" ? "selected" : ""}
               onClick={() => {
                 setEmail("admin@atlas.demo");
                 setPassword("DemoAdmin2026!");
               }}
             >
-              Admin <small>Full access</small>
+              <ShieldCheck size={19} /> Admin{" "}
+              <small>Create, edit & delete</small>
             </button>
             <button
               type="button"
+              aria-pressed={email === "viewer@atlas.demo"}
+              disabled={busy}
               className={email === "viewer@atlas.demo" ? "selected" : ""}
               onClick={() => {
                 setEmail("viewer@atlas.demo");
                 setPassword("DemoViewer2026!");
               }}
             >
-              Viewer <small>Read only</small>
+              <LockKeyhole size={19} /> Viewer <small>Read-only access</small>
             </button>
           </div>
+          <p className="credential-note">
+            Demo credentials are prefilled. Just select{" "}
+            <strong>Enter workspace</strong>.
+          </p>
           <form onSubmit={submit}>
             <label>
               Email address
@@ -210,7 +234,10 @@ function Login({
             <ArrowUpRight size={15} />
           </a>
         </div>
-        <span className="login-credit">Designed & built by ScorpionD</span>
+        <span className="login-credit">
+          Built as a portfolio demo to showcase production-style full-stack
+          development, API integration and troubleshooting.
+        </span>
       </section>
     </main>
   );
@@ -242,6 +269,7 @@ export default function App() {
   const navigate = (next: View) => {
     setView(next);
     setMobile(false);
+    window.scrollTo({ top: 0, behavior: "instant" });
   };
   async function logout() {
     try {
@@ -316,6 +344,7 @@ export default function App() {
                 (i === 3 ? "nav-separated" : "")
               }
               onClick={() => navigate(item.id)}
+              aria-current={view === item.id ? "page" : undefined}
               disabled={item.id === "audit" && session.user.role !== "admin"}
               title={
                 item.id === "audit" && session.user.role !== "admin"
@@ -394,7 +423,7 @@ export default function App() {
         </header>
         <main className="main-content" id="main">
           {view === "overview" ? (
-            <Overview navigate={navigate} />
+            <Overview navigate={navigate} role={session.user.role} />
           ) : view === "customers" || view === "orders" ? (
             <Records
               key={view}
@@ -406,8 +435,10 @@ export default function App() {
             <IntegrationLab />
           ) : view === "audit" ? (
             <AuditLog />
-          ) : (
+          ) : view === "debugging" ? (
             <Debugging />
+          ) : (
+            <ProjectDetails />
           )}
           <footer className="app-footer">
             <span>Atlas Operations · Full-Stack API Dashboard</span>

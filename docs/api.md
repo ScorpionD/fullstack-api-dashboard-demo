@@ -59,7 +59,13 @@ Order:
 
 Order amounts are integer EUR cents, 1–100000000 (€0.01–€1,000,000). Fractional cents, strings, negative or zero amounts are rejected. Names are 2–80 characters, company names 2–100, descriptions 2–120 and email addresses at most 160 characters. Bodies must be JSON and at most 16 KiB. Unknown properties, including attempted workspace or role overrides, are rejected.
 
-## Errors
+## Audit records
+
+`GET /audit` is admin-only and returns `{data,meta}`. Each row includes `id`, `action` (`create`, `update`, `delete`), `entity` (`customer`, `order`), `summary`, `created_at`, `actor` and `role` (`admin` or `user`, labelled Viewer in the UI). Update summaries identify changed business fields; a no-op update is explicitly described as having no field-value changes. Timestamps use ISO 8601 in the API and the visitor's local time in the UI.
+
+All business CRUD writes and their before/after audit records share the same PostgreSQL transaction. Failed writes do not leave an audit record. The audit endpoint does not offer edit/delete actions.
+
+## Error responses
 
 ```json
 {

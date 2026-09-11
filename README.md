@@ -1,10 +1,51 @@
 # Atlas Operations — Full-Stack API / Debugging Dashboard
 
-A working portfolio application with a React/TypeScript dashboard, Node.js REST API, PostgreSQL, authentication, role-based access, transactional CRUD and an external-service reliability lab.
+**[Open the live demo](https://fullstack-api-dashboard-demo.pages.dev/)** · **[GitHub repository](https://github.com/ScorpionD/fullstack-api-dashboard-demo)** · [API reference](docs/api.md) · [Debugging casebook](docs/debugging.md)
 
-**Live:** https://fullstack-api-dashboard-demo.pages.dev/
+A full-stack operations dashboard for service businesses and sales teams. Manage customers and orders, inspect completed revenue, follow an audit trail and see how a real external API integration handles failure.
 
-**Repository:** https://github.com/ScorpionD/fullstack-api-dashboard-demo
+Built as a portfolio demo to showcase production-style full-stack development, API integration and troubleshooting. The interface uses a real Node.js API and PostgreSQL database. Business records and revenue are fictional; each visitor receives an isolated workspace.
+
+![Atlas Operations dashboard](docs/screenshots/desktop-overview.png)
+
+[View the screenshots](#screenshots) · [What this project demonstrates](#what-this-project-demonstrates) · [Architecture](#architecture) · [Local setup](#local-development) · [Docker](#docker-deployment) · [Deployment](#cloudflare-pages-deployment)
+
+## A quick tour
+
+1. Choose **Admin** and select **Enter workspace**. The public demo credentials are prefilled.
+2. Open **Customers**, create a test customer and edit their company. Try a search or status filter.
+3. Create an **Order**, update its status, then inspect **Audit log** for the action, actor, role, timestamp and changed fields.
+4. In **Integration lab**, run **Normal response**, then **Simulate a timeout** and **Simulate a bad response**. Every result identifies whether it is fresh, cached, a fallback or unavailable.
+5. Open **Debugging cases** for five Bug → Root cause → Fix examples with direct fix-commit links. **Architecture** explains the connected stack and recorded verification results.
+6. Sign out and enter as **Viewer** to inspect read-only access. A new login starts a new isolated workspace.
+
+## What this project demonstrates
+
+| Capability | Evidence in the working application |
+| --- | --- |
+| Full-stack development | Responsive React/TypeScript UI connected to an Express API and persistent database |
+| REST API design | Consistent JSON contracts, CRUD, pagination, search, status filters and actionable errors |
+| PostgreSQL data modeling | Users, sessions, isolated workspaces, customers, orders and transactional audit records |
+| Authentication and roles | Server-side session expiry, admin/viewer authorization, CSRF and origin checks |
+| Error handling | Loading completion, retry without losing form data, validation feedback and explicit fallback states |
+| External API integration | A real Frankfurter REST adapter with checked payloads, timeouts, caching and one bounded retry |
+| Debugging | Five preserved regression/fix histories with reproducible tests and source links |
+| Testing | Contract and React tests, actual PostgreSQL API tests, public API verification and responsive browser checks |
+| Deployment | Cloudflare Pages, a protected Worker gateway and an isolated Docker API/database deployment |
+
+## Debugging showcase
+
+These are intentional engineering exercises with reproducible failures, not claims about client incidents. The final `main` branch contains corrected code. Git history has not been rewritten.
+
+| Bug | Root cause | Fix |
+| --- | --- | --- |
+| Missing customer/amount fields | Database and UI contracts use different names and units | [Explicit response mapping](https://github.com/ScorpionD/fullstack-api-dashboard-demo/commit/55ac1f6) |
+| Expired token accepted | Authentication checked existence without expiry | [Validate expiry on every request](https://github.com/ScorpionD/fullstack-api-dashboard-demo/commit/44801a3) |
+| Loading never finishes on error | Rejected request leaves loading active | [Complete error state and support retry](https://github.com/ScorpionD/fullstack-api-dashboard-demo/commit/0baa71c) |
+| Filtered page appears empty | Page offset belongs to the old result set | [Reset/clamp pagination](https://github.com/ScorpionD/fullstack-api-dashboard-demo/commit/05110df) |
+| Invalid order amount accepted | Coercion bypasses the monetary contract | [Positive bounded integer validation](https://github.com/ScorpionD/fullstack-api-dashboard-demo/commit/072c732) |
+
+See [docs/debugging.md](docs/debugging.md) for regression checks, exact fix commits and safe reproduction instructions.
 
 ## Explore the demo
 
@@ -28,7 +69,9 @@ Each login creates an isolated workspace containing 24 fictional customers and 4
 - Explicit workspace scoping and a composite foreign key prevent orders from referencing another visitor's customer.
 - A real **Frankfurter REST API** adapter validates EUR/USD/GBP reference rates. Successful results are cached for 15 minutes. Timeouts and malformed data produce an explicit fallback to the last verified response, or an honest unavailable state when no verified data exists.
 - Request-scoped timeout/bad-response simulations demonstrate the adapter's recovery path without altering global settings or deploying broken code. These simulations are clearly labelled.
-- Loading, empty, error, retry, modal validation, deletion confirmation and toast states; stale request cancellation prevents outdated results replacing a newer view.
+- Loading, empty, error, retry, modal validation, deletion confirmation and toast states; stale request cancellation prevents outdated results replacing a newer view. Empty searches can be reset in one action; customer-option retries preserve an unfinished order form.
+- Customer and order tables become labelled record cards on narrow screens, keeping edit/delete controls visible. Inputs, modal controls and primary actions use touch-friendly sizing.
+- Audit entries expose the action, entity, user/role, timestamp and changed field names. The overview shows recent changes for admins; viewers cannot request the protected audit endpoint.
 - Five documented debugging cases with reproducible regression tests and separate Git history. See [debugging casebook](docs/debugging.md).
 
 The application uses fictional data and production-style engineering patterns. It is not a payment system, financial advice service or a production SLA offering. Rates are informational; orders always remain in EUR. There is no claim of real commercial revenue or customer adoption.
@@ -76,10 +119,14 @@ Open `http://localhost:5173` (the default allowed local origin). Vite proxies `/
 docker compose exec db createdb -U dashboard dashboard_test
 # TEST_DATABASE_URL must explicitly target the separate dashboard_test database.
 npm test
+npm run lint
 npm run build
+npm audit --audit-level=moderate
 ```
 
 `npm test` includes actual PostgreSQL API tests; it deliberately fails if the separate test database is not configured. `npm run test:unit` runs contract and React tests without a database. CI provisions its own temporary PostgreSQL service and runs the full suite and production build. Coverage includes authentication/expiry, CSRF, viewer restrictions, CRUD/audit consistency, cross-workspace protection, search, filtering, pagination, validation, external adapter failures and frontend recovery. Debugging reproduction branches are expected to fail selected regression checks.
+
+`npm run lint` currently performs strict TypeScript checking, not a separate ESLint ruleset. This is named explicitly so the verification scope is clear.
 
 ## Docker deployment
 
@@ -105,6 +152,8 @@ The production override disables database port publication. All containers have 
 - Store the matching `ORIGIN_SECRET` as a Worker secret. Bind the Worker to Pages production as `DASHBOARD_API`.
 - Preview branches must not receive production API access; the gateway accepts only the production origin.
 
+The existing Pages project is configured for GitHub pushes to `main`. If the Cloudflare GitHub app does not yet have access to this repository, its owner must approve **Confirm access** with their passkey/authenticator and select this repository in the installation. Keep the current deployment and service binding intact while that approval is pending. Verify the resulting deployment's commit SHA and successful build after the next push; a locally passing build alone does not prove automatic deployment.
+
 No secret has a `VITE_` prefix. `.env`, tunnel credentials and deployment configuration secrets are ignored by Git and excluded from the Docker build. Public demo passwords are intentionally separate from real server/database credentials.
 
 ## API documentation
@@ -123,7 +172,7 @@ Mobile: [overview](docs/screenshots/mobile-overview.png) · [order form](docs/sc
 
 ## Release verification
 
-42 automated checks pass, including real PostgreSQL API tests. The production build and dependency audit pass; 14 groups of public API smoke checks pass. See the [verification record](docs/verification.md) for scope and limitations. Run `npm run smoke:production` only when you intend to exercise the public demo; it creates its own isolated test workspace and does not use infrastructure credentials.
+47 automated checks pass, including real PostgreSQL API tests. The production build and dependency audit pass; the recorded public API verification covers 14 groups. See the [verification record](docs/verification.md) for dates, scope and limitations. Run `npm run smoke:production` only when you intend to exercise the public demo; it creates its own isolated test workspace and does not use infrastructure credentials.
 
 ## Technology
 

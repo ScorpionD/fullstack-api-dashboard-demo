@@ -102,6 +102,11 @@ describe("Real PostgreSQL CRUD and audit transactions", () => {
     customerId = r.body.data.id;
     const audit = await admin.get("/api/audit").expect(200);
     expect(audit.body.data[0].action).toBe("create");
+    expect(audit.body.data[0]).toMatchObject({
+      role: "admin",
+      actor: "Alex Morgan",
+      entity: "customer",
+    });
   });
   it("rejects duplicate customer data without extra audit records", async () => {
     await admin
@@ -125,6 +130,9 @@ describe("Real PostgreSQL CRUD and audit transactions", () => {
     );
     expect(rows.rows[0].before_data.name).toBe("Test Customer");
     expect(rows.rows[0].after_data.name).toBe("Updated Customer");
+    const audit = await admin.get("/api/audit").expect(200);
+    expect(audit.body.data[0].summary).toContain("Changed name");
+    expect(audit.body.data[0].summary).not.toContain("amount");
   });
   it("creates and maps a monetary order correctly", async () => {
     const r = await admin

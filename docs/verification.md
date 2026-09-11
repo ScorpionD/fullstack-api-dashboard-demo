@@ -4,8 +4,9 @@ Verified on 11 September 2026 against the real deployed application.
 
 ## Automated verification
 
-- `npm test`: **42 passed**, using Vitest 4.1.11, Testing Library and Supertest. Includes 17 API tests against a separate real PostgreSQL test database and 25 contract/frontend checks.
-- `npm run build`: TypeScript and Vite production build passed. Main JavaScript bundle approximately 265 kB, 83 kB compressed; no source maps or server secrets in the frontend bundle.
+- `npm test`: **47 passed**, using Vitest 4.1.11, Testing Library and Supertest. Includes 17 API tests against a separate real PostgreSQL test database and 30 contract/frontend checks. The original 42-check baseline is extended with role selection, clearing filters, order-form retry with preserved input, avoiding unnecessary requests and honest integration error/retry handling.
+- `npm run lint`: strict TypeScript checking passed. This script does not claim to run ESLint.
+- `npm run build`: TypeScript and Vite production build passed. Main JavaScript bundle approximately 277 kB, 86 kB compressed; no source maps or server secrets in the frontend bundle.
 - `npm audit --audit-level=moderate`: **0 vulnerabilities** at verification time.
 - GitHub Actions runs the full PostgreSQL-backed test suite and production build. The intentionally broken historical reproduction commit is expected to fail; corrected release checks pass.
 - `npm run smoke:production`: **14 live check groups passed** through the public Pages URL, including secure cookies, session restoration, role checks, origin/CSRF protection, size limits, customer/order CRUD, duplicate checks, filtered pagination, audit consistency, live Frankfurter responses and timeout/malformed-response fallback.

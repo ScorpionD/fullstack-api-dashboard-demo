@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { LoaderCircle } from "lucide-react";
 import { api, moneyToCents } from "../services/api";
 import { useResource } from "../hooks/useResource";
-import { Modal } from "./ui";
+import { Modal, ErrorPanel } from "./ui";
 import type { Customer, Order } from "../types";
 export function RecordEditor({
   kind,
@@ -18,7 +18,8 @@ export function RecordEditor({
   const order = record as Order | undefined,
     customer = record as Customer | undefined;
   const [busy, setBusy] = useState(false),
-    [error, setError] = useState("");
+    [error, setError] = useState(""),
+    [optionsRevision, setOptionsRevision] = useState(0);
   const [form, setForm] = useState({
     name: customer?.name || "",
     email: customer?.email || "",
@@ -30,7 +31,7 @@ export function RecordEditor({
   });
   const options = useResource<{
     data: { id: string; name: string; company: string }[];
-  }>("/customer-options");
+  }>(kind === "orders" ? "/customer-options" : null, optionsRevision);
   const field = (key: keyof typeof form, value: string) =>
     setForm((f) => ({ ...f, [key]: value }));
   const close = useCallback(() => {
@@ -132,10 +133,18 @@ export function RecordEditor({
               </select>
             </label>
             {options.error && (
-              <p role="alert" className="inline-error">
-                Customer list unavailable. Close this form and retry.
-              </p>
+              <ErrorPanel
+                message="Customer list unavailable. Retry without losing your form details."
+                retry={() => setOptionsRevision((v) => v + 1)}
+              />
             )}
+            {!options.loading &&
+              !options.error &&
+              options.data?.data.length === 0 && (
+                <p className="info-banner">
+                  Add a customer first, then return here to create their order.
+                </p>
+              )}
             <label>
               Description
               <input
@@ -193,7 +202,10 @@ export function RecordEditor({
             className="button primary"
             disabled={
               busy ||
-              (kind === "orders" && (options.loading || !!options.error))
+              (kind === "orders" &&
+                (options.loading ||
+                  !!options.error ||
+                  !options.data?.data.length))
             }
           >
             {busy ? (

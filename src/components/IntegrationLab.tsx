@@ -10,11 +10,14 @@ import {
 } from "lucide-react";
 import { api } from "../services/api";
 import type { Rates } from "../types";
+import { ErrorPanel } from "./ui";
 export function IntegrationLab() {
   const [data, setData] = useState<Rates | null>(null),
     [busy, setBusy] = useState(false),
-    [error, setError] = useState("");
+    [error, setError] = useState(""),
+    [scenario, setScenario] = useState("live");
   async function run(scenario: string) {
+    setScenario(scenario);
     setBusy(true);
     setError("");
     try {
@@ -34,7 +37,8 @@ export function IntegrationLab() {
             Integration lab<span className="heading-dot">.</span>
           </h1>
           <p>
-            A real external API. Clear handling when things don’t go to plan.
+            Keep operations moving when an external provider slows down or sends
+            unusable data.
           </p>
         </div>
         <span className="small-chip">
@@ -62,27 +66,45 @@ export function IntegrationLab() {
             <ArrowUpRight size={15} />
           </a>
           <div className="scenario-list">
-            <button disabled={busy} onClick={() => run("live")}>
+            <button
+              aria-pressed={!!data && scenario === "live"}
+              disabled={busy}
+              onClick={() => run("live")}
+            >
               <CheckCircle2 />
               <span>
-                <strong>Live request</strong>
-                <small>Fetch verified rates, cached for 15 minutes</small>
+                <strong>Normal response</strong>
+                <small>
+                  Real API request · verified data cached for 15 minutes
+                </small>
               </span>
               <ArrowUpRight size={16} />
             </button>
-            <button disabled={busy} onClick={() => run("timeout")}>
+            <button
+              aria-pressed={!!data && scenario === "timeout"}
+              disabled={busy}
+              onClick={() => run("timeout")}
+            >
               <Clock3 />
               <span>
                 <strong>Simulate a timeout</strong>
-                <small>Test the adapter’s fallback response</small>
+                <small>
+                  Provider is too slow · use last verified data if available
+                </small>
               </span>
               <ArrowUpRight size={16} />
             </button>
-            <button disabled={busy} onClick={() => run("bad-response")}>
+            <button
+              aria-pressed={!!data && scenario === "bad-response"}
+              disabled={busy}
+              onClick={() => run("bad-response")}
+            >
               <AlertTriangle />
               <span>
                 <strong>Simulate a bad response</strong>
-                <small>Reject an invalid provider payload</small>
+                <small>
+                  Unusable data · reject it instead of displaying it as valid
+                </small>
               </span>
               <ArrowUpRight size={16} />
             </button>
@@ -96,26 +118,24 @@ export function IntegrationLab() {
         <div className="panel integration-result">
           <div className="panel-title">
             <div>
-              <span className="eyebrow">RESPONSE INSPECTOR</span>
-              <h2>Readable. Traceable. Resilient.</h2>
+              <span className="eyebrow">WHAT YOUR TEAM SEES</span>
+              <h2>A clear outcome for every request.</h2>
             </div>
             <span className={"status-indicator " + (busy ? "working" : "")}>
               {busy ? "Processing" : "Ready"}
             </span>
           </div>
           {busy ? (
-            <div className="state">
+            <div className="state" role="status">
               <RefreshCw className="spin" />
               <strong>Contacting the adapter…</strong>
               <span>A request has a bounded timeout and one retry.</span>
             </div>
           ) : error ? (
-            <p className="inline-error" role="alert">
-              {error}
-            </p>
+            <ErrorPanel message={error} retry={() => run(scenario)} />
           ) : data ? (
             <>
-              <div className={"result-banner " + data.status}>
+              <div className={"result-banner " + data.status} role="status">
                 <strong>
                   {data.status === "live"
                     ? "Verified live response"
@@ -129,6 +149,18 @@ export function IntegrationLab() {
                   {data.reason ||
                     "The provider payload passed server-side validation."}
                 </p>
+                {data.status === "fallback" && (
+                  <p>
+                    Showing previously validated data, not a fresh provider
+                    response. Check the rate date before using it.
+                  </p>
+                )}
+                {data.status === "unavailable" && (
+                  <p>
+                    No verified data is available yet. Run a normal request to
+                    try again.
+                  </p>
+                )}
               </div>
               <div className="rates-grid">
                 <div>
@@ -150,6 +182,17 @@ export function IntegrationLab() {
                   <dd>{data.date || "No verified data yet"}</dd>
                 </div>
                 <div>
+                  <dt>Last verified</dt>
+                  <dd>
+                    {data.fetchedAt
+                      ? new Date(data.fetchedAt).toLocaleString("en-GB", {
+                          dateStyle: "medium",
+                          timeStyle: "short",
+                        })
+                      : "No verified response"}
+                  </dd>
+                </div>
+                <div>
                   <dt>Adapter processing</dt>
                   <dd>{data.processingMs} ms</dd>
                 </div>
@@ -157,7 +200,7 @@ export function IntegrationLab() {
                   <dt>Scenario</dt>
                   <dd>
                     {data.scenario === "live"
-                      ? "Real provider request"
+                      ? "Live API / verified cache"
                       : `Simulated ${data.scenario}`}
                   </dd>
                 </div>
@@ -176,6 +219,23 @@ export function IntegrationLab() {
               </span>
             </div>
           )}
+        </div>
+      </div>
+      <div className="integration-promises">
+        <div>
+          <ShieldCheck size={19} />
+          <strong>Validate before display</strong>
+          <p>Only checked provider data can become a verified result.</p>
+        </div>
+        <div>
+          <Clock3 size={19} />
+          <strong>Bound the waiting time</strong>
+          <p>Timeout handling and one retry keep requests under control.</p>
+        </div>
+        <div>
+          <RefreshCw size={19} />
+          <strong>Label every fallback</strong>
+          <p>Show the last verified result or an explicit unavailable state.</p>
         </div>
       </div>
     </>

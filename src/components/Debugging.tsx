@@ -9,6 +9,8 @@ export const cases = [
     id: "01",
     title: "API response mapping",
     layer: "API CONTRACT",
+    cause: "The UI and database used different field names and amount units.",
+    commit: "55ac1f6",
     before:
       "Database fields were passed directly to the UI, producing missing amounts and customer names.",
     after:
@@ -19,6 +21,9 @@ export const cases = [
     id: "02",
     title: "Session expiry & authorization",
     layer: "AUTHENTICATION",
+    cause:
+      "Authentication checked token existence without checking its expiry timestamp.",
+    commit: "44801a3",
     before:
       "An expired session could be treated as valid because its existence was checked without its expiry.",
     after:
@@ -29,6 +34,8 @@ export const cases = [
     id: "03",
     title: "Loading state recovery",
     layer: "REACT STATE",
+    cause: "The rejected promise never transitioned the view out of loading.",
+    commit: "0baa71c",
     before:
       "A rejected request could leave the loading indicator active indefinitely.",
     after:
@@ -39,6 +46,8 @@ export const cases = [
     id: "04",
     title: "Pagination after filtering",
     layer: "QUERY LOGIC",
+    cause: "The page offset belonged to the old, larger result set.",
+    commit: "05110df",
     before:
       "Changing filters on a later page could produce an empty list despite matching records.",
     after:
@@ -49,6 +58,8 @@ export const cases = [
     id: "05",
     title: "Monetary input validation",
     layer: "DATA INTEGRITY",
+    cause: "Permissive number coercion bypassed the monetary data contract.",
+    commit: "072c732",
     before:
       "Coercion admitted zero, negative or fractional cents into order updates.",
     after:
@@ -63,12 +74,9 @@ export function Debugging() {
         <div>
           <span className="eyebrow">THE ENGINEERING BEHIND THE INTERFACE</span>
           <h1>
-            Debugging casebook<span className="heading-dot">.</span>
+            Five bugs. Five verified fixes<span className="heading-dot">.</span>
           </h1>
-          <p>
-            Five reproducible regressions, documented fixes and automated
-            checks.
-          </p>
+          <p>Real debugging scenarios demonstrated in Git history.</p>
         </div>
         <a
           href="https://github.com/ScorpionD/fullstack-api-dashboard-demo/blob/main/docs/debugging.md"
@@ -76,14 +84,15 @@ export function Debugging() {
           rel="noreferrer"
           className="button secondary"
         >
-          Explore the fixes
+          Read docs/debugging.md
           <ArrowUpRight size={16} />
         </a>
       </div>
       <div className="info-banner">
         <ShieldCheck size={17} />
-        This live application runs the corrected code. Reproductions are
-        documented in a separate Git branch and are never deployed.
+        Intentional engineering exercises with reproducible tests. This demo
+        runs the corrected main branch; the original regressions remain in a
+        separate, undeployed branch.
       </div>
       <div className="case-grid">
         {cases.map((c) => (
@@ -97,17 +106,32 @@ export function Debugging() {
               </span>
             </div>
             <h2>{c.title}</h2>
-            <div>
-              <h3>What went wrong</h3>
-              <p>{c.before}</p>
-            </div>
-            <div>
-              <h3>The fix</h3>
-              <p>{c.after}</p>
+            <div className="case-story">
+              <div>
+                <h3>Bug</h3>
+                <p>{c.before}</p>
+              </div>
+              <div>
+                <h3>Root cause</h3>
+                <p>{c.cause}</p>
+              </div>
+              <div>
+                <h3>Fix</h3>
+                <p>{c.after}</p>
+              </div>
             </div>
             <div className="test-proof">
               <GitCommitHorizontal size={18} />
               <p>{c.test}</p>
+              <a
+                href={`https://github.com/ScorpionD/fullstack-api-dashboard-demo/commit/${c.commit}`}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`View fix commit ${c.commit}`}
+              >
+                {c.commit}
+                <ArrowUpRight size={13} />
+              </a>
             </div>
           </article>
         ))}

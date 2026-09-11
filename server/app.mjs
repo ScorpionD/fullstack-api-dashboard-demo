@@ -322,6 +322,27 @@ export function createApp({
     });
   });
   async function audit(c, req, action, entity, id, before, after) {
+    const labels = {
+      name: "name",
+      email: "email",
+      company: "company",
+      status: "status",
+      customer_id: "customer",
+      description: "description",
+      amount_cents: "amount",
+    };
+    const changed =
+      action === "update"
+        ? Object.entries(labels)
+            .filter(([key]) => before[key] !== after[key])
+            .map(([, label]) => label)
+        : [];
+    const detail =
+      action === "update"
+        ? changed.length
+          ? ` · Changed ${changed.join(", ")}`
+          : " · No field values changed"
+        : "";
     await c.query(
       "INSERT INTO audit_logs(workspace_id,user_id,action,entity,entity_id,summary,before_data,after_data) VALUES($1,$2,$3,$4,$5,$6,$7,$8)",
       [
@@ -330,7 +351,7 @@ export function createApp({
         action,
         entity,
         id,
-        `${action[0].toUpperCase() + action.slice(1)}d ${entity}: ${(after || before).name || (after || before).reference}`,
+        `${action[0].toUpperCase() + action.slice(1)}d ${entity}: ${(after || before).name || (after || before).reference}${detail}`,
         before,
         after,
       ],
@@ -453,7 +474,7 @@ export function createApp({
     const meta = pageMeta(total, page, pageSize);
     const rows = (
       await db.query(
-        "SELECT a.id,a.action,a.entity,a.summary,a.created_at,u.name AS actor FROM audit_logs a JOIN users u ON u.id=a.user_id WHERE a.workspace_id=$1 ORDER BY a.id DESC LIMIT $2 OFFSET $3",
+        "SELECT a.id,a.action,a.entity,a.summary,a.created_at,u.name AS actor,u.role FROM audit_logs a JOIN users u ON u.id=a.user_id WHERE a.workspace_id=$1 ORDER BY a.id DESC LIMIT $2 OFFSET $3",
         [w, meta.pageSize, (meta.page - 1) * meta.pageSize],
       )
     ).rows;

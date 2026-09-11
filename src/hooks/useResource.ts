@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import { api } from "../services/api";
-export function useResource<T>(path: string, revision = 0) {
+export function useResource<T>(path: string | null, revision = 0) {
   const [state, setState] = useState<{
     data: T | null;
     error: string | null;
     loading: boolean;
   }>({ data: null, error: null, loading: true });
   useEffect(() => {
+    if (path === null) {
+      setState({ data: null, error: null, loading: false });
+      return;
+    }
     const controller = new AbortController();
     setState({ data: null, error: null, loading: true });
     api<T>(path, { signal: controller.signal })

@@ -61,7 +61,7 @@ export function ErrorPanel({
       <AlertCircle />
       <strong>We couldn’t load this view</strong>
       <span>{message}</span>
-      <button className="button secondary" onClick={retry}>
+      <button type="button" className="button secondary" onClick={retry}>
         Try again
       </button>
     </div>

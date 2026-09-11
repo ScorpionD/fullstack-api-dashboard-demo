@@ -28,7 +28,28 @@ export function AuditLog() {
           Admin access
         </span>
       </div>
+      <div className="audit-assurance">
+        <ShieldCheck size={24} />
+        <div>
+          <strong>Every change comes with a record.</strong>
+          <p>
+            All write operations are recorded in the same database transaction
+            as the business change.
+          </p>
+        </div>
+      </div>
       <div className="panel">
+        <div className="panel-title">
+          <div>
+            <h2>Workspace change history</h2>
+            <p>Action, record, person and time — in one traceable timeline.</p>
+          </div>
+          {data && (
+            <span className="small-chip">
+              {data.meta.total} recorded changes
+            </span>
+          )}
+        </div>
         {loading ? (
           <Loading />
         ) : error ? (
@@ -53,15 +74,25 @@ export function AuditLog() {
                     <Icon size={17} />
                   </span>
                   <div>
+                    <div className="audit-labels">
+                      <span className={"action-label " + a.action}>
+                        {a.action}
+                      </span>
+                      <span className="entity-label">{a.entity}</span>
+                    </div>
                     <strong>{a.summary}</strong>
                     <small>
-                      {a.actor} · {a.entity}
+                      {a.actor} · {a.role === "admin" ? "Admin" : "Viewer"}
                     </small>
                   </div>
-                  <time>
+                  <time
+                    dateTime={a.created_at}
+                    title={new Date(a.created_at).toISOString()}
+                  >
                     {new Date(a.created_at).toLocaleString("en-GB", {
                       day: "numeric",
                       month: "short",
+                      year: "numeric",
                       hour: "2-digit",
                       minute: "2-digit",
                     })}

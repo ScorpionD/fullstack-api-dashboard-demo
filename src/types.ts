@@ -1,6 +1,12 @@
 export type Role = "admin" | "user";
 export type View =
-  "overview" | "customers" | "orders" | "integrations" | "audit" | "debugging";
+  | "overview"
+  | "customers"
+  | "orders"
+  | "integrations"
+  | "audit"
+  | "debugging"
+  | "architecture";
 export interface Session {
   user: { id: string; name: string; email: string; role: Role };
   csrfToken: string;
@@ -62,4 +68,5 @@ export interface Audit {
   summary: string;
   created_at: string;
   actor: string;
+  role: Role;
 }
