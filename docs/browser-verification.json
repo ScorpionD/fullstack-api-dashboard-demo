@@ -1,0 +1,361 @@
+{
+  "verifiedOn": "2026-09-11",
+  "url": "https://fullstack-api-dashboard-demo.pages.dev/",
+  "applicationCommit": "029fe0b45c76e8d66e8aa84c8d9f8f8cffe42827",
+  "layouts": [
+    {
+      "width": 320,
+      "view": "Overview",
+      "actualWidth": 320,
+      "clientWidth": 305,
+      "documentWidth": 305,
+      "heading": "Operations overview.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 320,
+      "view": "Customers",
+      "actualWidth": 320,
+      "clientWidth": 305,
+      "documentWidth": 305,
+      "heading": "Customers",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 320,
+      "view": "Orders",
+      "actualWidth": 320,
+      "clientWidth": 305,
+      "documentWidth": 305,
+      "heading": "Orders",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 320,
+      "view": "Audit log",
+      "actualWidth": 320,
+      "clientWidth": 305,
+      "documentWidth": 305,
+      "heading": "Audit log.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 320,
+      "view": "Integration lab",
+      "actualWidth": 320,
+      "clientWidth": 305,
+      "documentWidth": 305,
+      "heading": "Integration lab.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 320,
+      "view": "Debugging cases 5",
+      "actualWidth": 320,
+      "clientWidth": 305,
+      "documentWidth": 305,
+      "heading": "Five bugs. Five verified fixes.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 320,
+      "view": "Architecture",
+      "actualWidth": 320,
+      "clientWidth": 305,
+      "documentWidth": 305,
+      "heading": "Built on solid foundations.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 390,
+      "view": "Overview",
+      "actualWidth": 390,
+      "clientWidth": 375,
+      "documentWidth": 375,
+      "heading": "Operations overview.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 390,
+      "view": "Customers",
+      "actualWidth": 390,
+      "clientWidth": 375,
+      "documentWidth": 375,
+      "heading": "Customers",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 390,
+      "view": "Orders",
+      "actualWidth": 390,
+      "clientWidth": 375,
+      "documentWidth": 375,
+      "heading": "Orders",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 390,
+      "view": "Audit log",
+      "actualWidth": 390,
+      "clientWidth": 375,
+      "documentWidth": 375,
+      "heading": "Audit log.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 390,
+      "view": "Integration lab",
+      "actualWidth": 390,
+      "clientWidth": 375,
+      "documentWidth": 375,
+      "heading": "Integration lab.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 390,
+      "view": "Debugging cases 5",
+      "actualWidth": 390,
+      "clientWidth": 375,
+      "documentWidth": 375,
+      "heading": "Five bugs. Five verified fixes.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 390,
+      "view": "Architecture",
+      "actualWidth": 390,
+      "clientWidth": 375,
+      "documentWidth": 375,
+      "heading": "Built on solid foundations.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 768,
+      "view": "Overview",
+      "actualWidth": 768,
+      "clientWidth": 753,
+      "documentWidth": 753,
+      "heading": "Operations overview.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 768,
+      "view": "Customers",
+      "actualWidth": 768,
+      "clientWidth": 753,
+      "documentWidth": 753,
+      "heading": "Customers",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 768,
+      "view": "Orders",
+      "actualWidth": 768,
+      "clientWidth": 753,
+      "documentWidth": 753,
+      "heading": "Orders",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 768,
+      "view": "Audit log",
+      "actualWidth": 768,
+      "clientWidth": 753,
+      "documentWidth": 753,
+      "heading": "Audit log.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 768,
+      "view": "Integration lab",
+      "actualWidth": 768,
+      "clientWidth": 753,
+      "documentWidth": 753,
+      "heading": "Integration lab.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 768,
+      "view": "Debugging cases 5",
+      "actualWidth": 768,
+      "clientWidth": 753,
+      "documentWidth": 753,
+      "heading": "Five bugs. Five verified fixes.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 768,
+      "view": "Architecture",
+      "actualWidth": 768,
+      "clientWidth": 753,
+      "documentWidth": 753,
+      "heading": "Built on solid foundations.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 1440,
+      "view": "Overview",
+      "actualWidth": 1440,
+      "clientWidth": 1425,
+      "documentWidth": 1425,
+      "heading": "Operations overview.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 1440,
+      "view": "Customers",
+      "actualWidth": 1440,
+      "clientWidth": 1425,
+      "documentWidth": 1425,
+      "heading": "Customers",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 1440,
+      "view": "Orders",
+      "actualWidth": 1440,
+      "clientWidth": 1425,
+      "documentWidth": 1425,
+      "heading": "Orders",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 1440,
+      "view": "Audit log",
+      "actualWidth": 1440,
+      "clientWidth": 1425,
+      "documentWidth": 1425,
+      "heading": "Audit log.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 1440,
+      "view": "Integration lab",
+      "actualWidth": 1440,
+      "clientWidth": 1425,
+      "documentWidth": 1425,
+      "heading": "Integration lab.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 1440,
+      "view": "Debugging cases 5",
+      "actualWidth": 1440,
+      "clientWidth": 1425,
+      "documentWidth": 1425,
+      "heading": "Five bugs. Five verified fixes.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 1440,
+      "view": "Architecture",
+      "actualWidth": 1440,
+      "clientWidth": 1425,
+      "documentWidth": 1425,
+      "heading": "Built on solid foundations.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 320,
+      "view": "Login",
+      "actualWidth": 320,
+      "clientWidth": 305,
+      "documentWidth": 305,
+      "heading": "Good operations.Great foundations.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 390,
+      "view": "Login",
+      "actualWidth": 390,
+      "clientWidth": 375,
+      "documentWidth": 375,
+      "heading": "Good operations.Great foundations.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 768,
+      "view": "Login",
+      "actualWidth": 768,
+      "clientWidth": 768,
+      "documentWidth": 768,
+      "heading": "Good operations.Great foundations.",
+      "horizontalOverflow": false
+    },
+    {
+      "width": 1440,
+      "view": "Login",
+      "actualWidth": 1440,
+      "clientWidth": 1440,
+      "documentWidth": 1440,
+      "heading": "Good operations.Great foundations.",
+      "horizontalOverflow": false
+    }
+  ],
+  "editOrderModals": [
+    {
+      "width": 320,
+      "actualWidth": 320,
+      "rect": {
+        "bottom": 744.796875,
+        "height": 589.59375,
+        "left": 12,
+        "right": 293,
+        "top": 155.203125,
+        "width": 281,
+        "x": 12,
+        "y": 155.203125
+      },
+      "windowHeight": 900,
+      "fitsViewport": true
+    },
+    {
+      "width": 390,
+      "actualWidth": 390,
+      "rect": {
+        "bottom": 734.890625,
+        "height": 569.796875,
+        "left": 12,
+        "right": 363,
+        "top": 165.09375,
+        "width": 351,
+        "x": 12,
+        "y": 165.09375
+      },
+      "windowHeight": 900,
+      "fitsViewport": true
+    },
+    {
+      "width": 768,
+      "actualWidth": 768,
+      "rect": {
+        "bottom": 734.890625,
+        "height": 569.796875,
+        "left": 136.5,
+        "right": 616.5,
+        "top": 165.09375,
+        "width": 480,
+        "x": 136.5,
+        "y": 165.09375
+      },
+      "windowHeight": 900,
+      "fitsViewport": true
+    },
+    {
+      "width": 1440,
+      "actualWidth": 1440,
+      "rect": {
+        "bottom": 734.890625,
+        "height": 569.796875,
+        "left": 472.5,
+        "right": 952.5,
+        "top": 165.09375,
+        "width": 480,
+        "x": 472.5,
+        "y": 165.09375
+      },
+      "windowHeight": 900,
+      "fitsViewport": true
+    }
+  ]
+}

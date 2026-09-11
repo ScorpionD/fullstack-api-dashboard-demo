@@ -6,7 +6,7 @@ A full-stack operations dashboard for service businesses and sales teams. Manage
 
 Built as a portfolio demo to showcase production-style full-stack development, API integration and troubleshooting. The interface uses a real Node.js API and PostgreSQL database. Business records and revenue are fictional; each visitor receives an isolated workspace.
 
-![Atlas Operations dashboard](docs/screenshots/desktop-overview.png)
+![Full-Stack API / Debugging Dashboard — live application](docs/screenshots/00-cover.jpg)
 
 [View the screenshots](#screenshots) · [What this project demonstrates](#what-this-project-demonstrates) · [Architecture](#architecture) · [Local setup](#local-development) · [Docker](#docker-deployment) · [Deployment](#cloudflare-pages-deployment)
 
@@ -152,7 +152,7 @@ The production override disables database port publication. All containers have 
 - Store the matching `ORIGIN_SECRET` as a Worker secret. Bind the Worker to Pages production as `DASHBOARD_API`.
 - Preview branches must not receive production API access; the gateway accepts only the production origin.
 
-The existing Pages project is configured for GitHub pushes to `main`. If the Cloudflare GitHub app does not yet have access to this repository, its owner must approve **Confirm access** with their passkey/authenticator and select this repository in the installation. Keep the current deployment and service binding intact while that approval is pending. Verify the resulting deployment's commit SHA and successful build after the next push; a locally passing build alone does not prove automatic deployment.
+The existing Pages project is configured for GitHub pushes to `main`. As of 11 September 2026, GitHub's **Confirm access** step is still pending, so this release was deployed by explicitly triggering the existing Pages project's build from `main`. GitHub CI passes, but automatic deployment after a push has not yet been verified. The repository owner must approve access with their passkey/authenticator and select this repository in the Cloudflare GitHub installation. Keep the current deployment and service binding intact while that approval is pending. Then verify that a push triggers a successful deployment with the matching commit SHA.
 
 No secret has a `VITE_` prefix. `.env`, tunnel credentials and deployment configuration secrets are ignored by Git and excluded from the Docker build. Public demo passwords are intentionally separate from real server/database credentials.
 
@@ -162,17 +162,26 @@ See [REST API reference](docs/api.md), [debugging casebook](docs/debugging.md) a
 
 ## Screenshots
 
-Actual production screens, captured after live verification. All customer and revenue data is fictional demo data.
+Eight actual production screenshots, captured on 11 September 2026 after live verification, plus a separate **1280 × 960 portfolio cover**. All customer and revenue data is fictional demo data. The cover combines a real application screenshot with project text; the eight screens are direct browser captures.
 
-![Desktop operations overview](docs/screenshots/desktop-overview.png)
+| Screen | What it demonstrates |
+| --- | --- |
+| [01 — Login / role selection](docs/screenshots/01-login-role-selection.jpg) | Clear Admin/Viewer entry and public demo credentials |
+| [02 — Dashboard overview](docs/screenshots/02-dashboard-overview.jpg) | Business KPIs, revenue chart, order status and recent activity |
+| [03 — Customers](docs/screenshots/03-customers.jpg) | Search, filters, pagination and record actions |
+| [04 — Edit order](docs/screenshots/04-edit-order.jpg) | Validated customer, amount and status form |
+| [05 — Audit log](docs/screenshots/05-audit-log.jpg) | Six real CRUD events with actor, role, timestamp and change summary |
+| [06 — Integration lab](docs/screenshots/06-integration-lab.jpg) | Simulated bad response and explicitly identified verified fallback |
+| [07 — Debugging showcase](docs/screenshots/07-debugging-showcase.jpg) | Five documented Bug → Root cause → Fix cases |
+| [08 — Architecture / features](docs/screenshots/08-architecture-features.jpg) | Connected stack, security patterns and verified test results |
 
-![External API timeout handled with verified fallback data](docs/screenshots/integration-fallback.png)
+[Open the full gallery](docs/screenshots/README.md) · [Download the cover](docs/screenshots/00-cover.jpg)
 
-Mobile: [overview](docs/screenshots/mobile-overview.png) · [order form](docs/screenshots/mobile-order-form.png).
+Additional verification captures: [mobile login](docs/screenshots/mobile-login.jpg) · [mobile overview](docs/screenshots/mobile-overview.jpg) · [mobile customers](docs/screenshots/mobile-customers.jpg) · [mobile order form](docs/screenshots/mobile-order-form.jpg) · [Viewer restrictions](docs/screenshots/viewer-access.jpg).
 
 ## Release verification
 
-47 automated checks pass, including real PostgreSQL API tests. The production build and dependency audit pass; the recorded public API verification covers 14 groups. See the [verification record](docs/verification.md) for dates, scope and limitations. Run `npm run smoke:production` only when you intend to exercise the public demo; it creates its own isolated test workspace and does not use infrastructure credentials.
+47 automated checks pass, including real PostgreSQL API tests. Strict TypeScript checking and the production build pass; the dependency audit reports 0 known vulnerabilities at verification time. Public API verification passes all 14 groups. Browser checks cover eight views at 320, 390, 768 and 1440 px (32 layouts), plus four edit-modal sizes, with no page-level horizontal overflow. Admin/Viewer permissions, CRUD, audit, page reload and external fallback were exercised through the live UI. See the [verification record](docs/verification.md) for dates, scope and limitations. Run `npm run smoke:production` only when you intend to exercise the public demo; it creates its own isolated test workspace and does not use infrastructure credentials.
 
 ## Technology
 
