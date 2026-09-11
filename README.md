@@ -113,7 +113,17 @@ See [REST API reference](docs/api.md), [debugging casebook](docs/debugging.md) a
 
 ## Screenshots
 
-Production screenshots are captured after live verification and stored in [docs/screenshots](docs/screenshots). They show the real application, not fabricated UI or customer results.
+Actual production screens, captured after live verification. All customer and revenue data is fictional demo data.
+
+![Desktop operations overview](docs/screenshots/desktop-overview.png)
+
+![External API timeout handled with verified fallback data](docs/screenshots/integration-fallback.png)
+
+Mobile: [overview](docs/screenshots/mobile-overview.png) · [order form](docs/screenshots/mobile-order-form.png).
+
+## Release verification
+
+42 automated checks pass, including real PostgreSQL API tests. The production build and dependency audit pass; 14 groups of public API smoke checks pass. See the [verification record](docs/verification.md) for scope and limitations. Run `npm run smoke:production` only when you intend to exercise the public demo; it creates its own isolated test workspace and does not use infrastructure credentials.
 
 ## Technology
 

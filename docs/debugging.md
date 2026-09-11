@@ -22,7 +22,7 @@ The debugging casebook in the UI summarizes these examples. The Integration Lab'
 | `05110df`  | Clamp pagination after filtering or deletion                     | 4 passed       |
 | `072c732`  | Reject non-integer, coerced, negative, zero or excessive amounts | 8 passed       |
 
-The changes are merged into `main`; production deploys only that branch. Automatic CI intentionally excludes the broken reproduction branch. To reproduce locally, use a disposable checkout with no production credentials:
+The changes are merged into `main`; production deploys only that branch. The historical reproduction commit retains the original CI configuration and has an expected failing check; this is part of the exercise, not a failed release. To reproduce locally, use a disposable checkout with no production credentials:
 
 ```sh
 git switch debugging/reproductions
