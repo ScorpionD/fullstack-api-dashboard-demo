@@ -31,6 +31,13 @@ The corrected application is live on Cloudflare Pages. The Node.js API and Postg
 
 The application release was initially deployed from `main` using an explicit Cloudflare Pages build trigger. On 11 September 2026 the owner completed GitHub's **Confirm access** step, and `fullstack-api-dashboard-demo` was added to the Cloudflare GitHub App's selected repositories. Existing repository selections were preserved. The project's Git source, production branch (`main`), build command (`npm run build`), output (`dist`) and production service binding remain configured. Production push deployments are enabled; preview deployments remain disabled.
 
+Automatic deployment was then verified end to end:
+
+- Pushed documentation commit [`68ca7d8596fbdd520a44c533ed659fe5157de832`](https://github.com/ScorpionD/fullstack-api-dashboard-demo/commit/68ca7d8596fbdd520a44c533ed659fe5157de832) to `main`.
+- Cloudflare recorded trigger type **`github:push`**, production environment and the matching commit SHA. No manual deployment command was used for this check.
+- Deployment [`5da11a7a-bc3c-4439-8742-60e86ae15a98`](https://5da11a7a.fullstack-api-dashboard-demo.pages.dev/) completed with **success** at **12:03:53 UTC on 11 September 2026**.
+- The corresponding [GitHub Actions run](https://github.com/ScorpionD/fullstack-api-dashboard-demo/actions/runs/34596985095) also completed successfully.
+
 The new deployment has independent services, networks, volume and credentials. No application or DNS changes were made to the other portfolio projects or cryptoanalyze.pro. The live site does not depend on the developer computer being online.
 
 The public smoke command deliberately uses only published demo credentials, creates separate demo workspaces, removes its own test records and invalidates its sessions. It never reads deployment secrets. This record documents functional verification, not an independent penetration test or a production SLA.
