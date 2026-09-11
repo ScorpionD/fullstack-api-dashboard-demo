@@ -6,4 +6,4 @@ export const listSchema=z.object({page:z.coerce.number().int().min(1).max(10000)
 export function mapOrder(row){return{id:row.id,customerId:row.customer_id,customerName:row.customer_name,company:row.company,reference:row.reference,description:row.description,amountCents:row.amount_cents,status:row.status,createdAt:row.created_at};}
 export function mapCustomer(row){return{id:row.id,name:row.name,email:row.email,company:row.company,status:row.status,createdAt:row.created_at};}
 export function escapeLike(input){return input.replace(/[\\%_]/g,'\\$&');}
-export function pageMeta(total,page,pageSize){const pages=Math.max(1,Math.ceil(total/pageSize));return{total,page,pageSize,pages};}
+export function pageMeta(total,page,pageSize){const pages=Math.max(1,Math.ceil(total/pageSize));return{total,page:Math.min(page,pages),pageSize,pages};}
