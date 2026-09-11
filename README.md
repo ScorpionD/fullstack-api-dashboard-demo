@@ -152,7 +152,7 @@ The production override disables database port publication. All containers have 
 - Store the matching `ORIGIN_SECRET` as a Worker secret. Bind the Worker to Pages production as `DASHBOARD_API`.
 - Preview branches must not receive production API access; the gateway accepts only the production origin.
 
-The existing Pages project is configured for GitHub pushes to `main`. As of 11 September 2026, GitHub's **Confirm access** step is still pending, so this release was deployed by explicitly triggering the existing Pages project's build from `main`. GitHub CI passes, but automatic deployment after a push has not yet been verified. The repository owner must approve access with their passkey/authenticator and select this repository in the Cloudflare GitHub installation. Keep the current deployment and service binding intact while that approval is pending. Then verify that a push triggers a successful deployment with the matching commit SHA.
+The Cloudflare GitHub App is authorized for this repository as of 11 September 2026, with access limited to selected repositories. Production deployments are enabled for pushes to `main`; preview deployments are disabled. The existing project, production API service binding and live URL are retained. Confirm each deployment's successful status and matching commit SHA in Cloudflare; the [verification record](docs/verification.md) records the end-to-end deployment check.
 
 No secret has a `VITE_` prefix. `.env`, tunnel credentials and deployment configuration secrets are ignored by Git and excluded from the Docker build. Public demo passwords are intentionally separate from real server/database credentials.
 

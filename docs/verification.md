@@ -29,7 +29,7 @@ The browser and smoke checks above exercise application commit `029fe0b45c76e8d6
 
 The corrected application is live on Cloudflare Pages. The Node.js API and PostgreSQL containers are healthy; the dedicated tunnel reaches the private API. PostgreSQL has no published production host port. The API's only host binding is loopback and its origin secret is required. The runtime database role is not a superuser and cannot create roles or databases.
 
-The application release was successfully deployed from `main` using an explicit Cloudflare Pages build trigger. The project's Git source, production branch, build command and output remain configured. Automatic push-triggered deployment still requires the owner's GitHub **Confirm access** passkey/authenticator step; it is not reported as verified while that approval is pending. This does not prevent the current public application from working.
+The application release was initially deployed from `main` using an explicit Cloudflare Pages build trigger. On 11 September 2026 the owner completed GitHub's **Confirm access** step, and `fullstack-api-dashboard-demo` was added to the Cloudflare GitHub App's selected repositories. Existing repository selections were preserved. The project's Git source, production branch (`main`), build command (`npm run build`), output (`dist`) and production service binding remain configured. Production push deployments are enabled; preview deployments remain disabled.
 
 The new deployment has independent services, networks, volume and credentials. No application or DNS changes were made to the other portfolio projects or cryptoanalyze.pro. The live site does not depend on the developer computer being online.
 
