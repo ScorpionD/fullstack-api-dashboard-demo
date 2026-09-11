@@ -10,10 +10,10 @@ A working portfolio application with a React/TypeScript dashboard, Node.js REST 
 
 Choose **Admin** or **Viewer** on the login screen, then select **Enter workspace**. The credentials shown by those buttons are intentionally public demo accounts. They grant no access to real customer data, infrastructure or other visitors' workspaces.
 
-| Account | Public demo password | Access |
-| --- | --- | --- |
-| `admin@atlas.demo` | `DemoAdmin2026!` | Read, create, edit, delete, audit log |
-| `viewer@atlas.demo` | `DemoViewer2026!` | Read-only customer, order, overview and integration views |
+| Account             | Public demo password | Access                                                    |
+| ------------------- | -------------------- | --------------------------------------------------------- |
+| `admin@atlas.demo`  | `DemoAdmin2026!`     | Read, create, edit, delete, audit log                     |
+| `viewer@atlas.demo` | `DemoViewer2026!`    | Read-only customer, order, overview and integration views |
 
 Each login creates an isolated workspace containing 24 fictional customers and 48 orders. A secure server session survives page reloads for up to 8 hours. Workspace data expires after 24 hours; cleanup runs hourly and on login. Public capacity is bounded to 200 workspaces, 100 customers and 200 orders per workspace. No private business data should be entered.
 

@@ -7,7 +7,11 @@ services:
       POSTGRES_DB: dashboard
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
       APP_DB_PASSWORD: ${APP_DB_PASSWORD:?Set APP_DB_PASSWORD in .env}
-    volumes: [postgres_data:/var/lib/postgresql/data, ./db/init-app.sh:/docker-entrypoint-initdb.d/01-app.sh:ro]
+    volumes:
+      [
+        postgres_data:/var/lib/postgresql/data,
+        ./db/init-app.sh:/docker-entrypoint-initdb.d/01-app.sh:ro,
+      ]
     ports: ["127.0.0.1:55441:5432"]
     networks: [database]
     restart: unless-stopped
@@ -20,7 +24,7 @@ services:
       interval: 5s
       timeout: 3s
       retries: 12
-    logging: {driver: json-file, options: {max-size: 5m, max-file: "2"}}
+    logging: { driver: json-file, options: { max-size: 5m, max-file: "2" } }
   api:
     build: .
     environment:
@@ -32,9 +36,9 @@ services:
       PORT: 4100
       DEMO_ADMIN_PASSWORD: ${DEMO_ADMIN_PASSWORD:-DemoAdmin2026!}
       DEMO_USER_PASSWORD: ${DEMO_USER_PASSWORD:-DemoViewer2026!}
-    depends_on: {db: {condition: service_healthy}}
+    depends_on: { db: { condition: service_healthy } }
     ports: ["127.0.0.1:4100:4100"]
-    networks: [database,edge]
+    networks: [database, edge]
     restart: unless-stopped
     read_only: true
     tmpfs: [/tmp]
@@ -44,11 +48,17 @@ services:
     cpus: 0.75
     pids_limit: 100
     healthcheck:
-      test: [CMD, node, -e, "fetch('http://127.0.0.1:4100/api/health',{headers:{'x-origin-secret':process.env.ORIGIN_SECRET||''}}).then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      test:
+        [
+          CMD,
+          node,
+          -e,
+          "fetch('http://127.0.0.1:4100/api/health',{headers:{'x-origin-secret':process.env.ORIGIN_SECRET||''}}).then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
       interval: 30s
       timeout: 5s
       retries: 3
-    logging: {driver: json-file, options: {max-size: 5m, max-file: "2"}}
+    logging: { driver: json-file, options: { max-size: 5m, max-file: "2" } }
 networks:
   database: {}
   edge: {}
