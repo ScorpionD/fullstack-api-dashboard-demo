@@ -1,5 +1,8 @@
 name: Tests and production build
-on: [push, pull_request]
+on:
+  push:
+    branches-ignore: [debugging/reproductions]
+  pull_request:
 jobs:
   verify:
     runs-on: ubuntu-latest

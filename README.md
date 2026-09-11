@@ -2,7 +2,8 @@
 
 A working portfolio application with a React/TypeScript dashboard, Node.js REST API, PostgreSQL, authentication, role-based access, transactional CRUD and an external-service reliability lab.
 
-**Live:** https://fullstack-api-dashboard-demo.pages.dev/  
+**Live:** https://fullstack-api-dashboard-demo.pages.dev/
+
 **Repository:** https://github.com/ScorpionD/fullstack-api-dashboard-demo
 
 ## Explore the demo

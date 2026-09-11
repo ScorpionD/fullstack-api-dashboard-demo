@@ -1,6 +1,6 @@
 # Five debugging cases
 
-The final main branch contains corrected application code. A separate, explicitly labelled reproduction branch demonstrates intentionally introduced bugs; it is never deployed to Pages or the API. Fix commits and the actual regression-run results are recorded here after verification.
+The final main branch contains corrected application code. These are intentional engineering exercises, not claims about client incidents. The separate `debugging/reproductions` branch stops at `7f0bcef` and is never deployed. Running the 24 unit/React checks on it produced **10 failures and 14 passes**, detecting all five intentionally introduced problems. Each fix below then passed its focused regression checks.
 
 | Case | Regression | Correct behavior | Tests |
 | --- | --- | --- | --- |
@@ -11,3 +11,26 @@ The final main branch contains corrected application code. A separate, explicitl
 | Validation | Zero, negative or fractional cents accepted | Positive bounded integer schema plus PostgreSQL constraints | Parameterized invalid-amount tests and real failed update |
 
 The debugging casebook in the UI summarizes these examples. The Integration Lab's timeout/bad-response controls are safe adapter simulations, not broken authentication, validation or production branches.
+
+## Review the fixes
+
+| Fix commit | Change | Focused checks |
+| --- | --- | --- |
+| `55ac1f6` | Explicit snake_case → camelCase mapping; preserve integer cents | 1 passed |
+| `44801a3` | Reject expired or invalid session timestamps | 2 passed |
+| `0baa71c` | End loading on rejection and keep retry usable | 2 passed |
+| `05110df` | Clamp pagination after filtering or deletion | 4 passed |
+| `072c732` | Reject non-integer, coerced, negative, zero or excessive amounts | 8 passed |
+
+The changes are merged into `main`; production deploys only that branch. Automatic CI intentionally excludes the broken reproduction branch. To reproduce locally, use a disposable checkout with no production credentials:
+
+```sh
+git switch debugging/reproductions
+npm ci
+npm run test:unit # Expected: 10 failures, 14 passes
+git switch main
+npm ci
+npm run test:unit # Expected: all passing
+```
+
+Do not run or deploy the reproduction branch against a public API or real business data.
