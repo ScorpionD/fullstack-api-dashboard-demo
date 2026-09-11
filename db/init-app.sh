@@ -1,0 +1,7 @@
+#!/bin/sh
+set -eu
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" -v app_password="$APP_DB_PASSWORD" <<'EOSQL'
+CREATE ROLE atlas_app LOGIN PASSWORD :'app_password' NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION;
+GRANT CONNECT ON DATABASE dashboard TO atlas_app;
+GRANT USAGE, CREATE ON SCHEMA public TO atlas_app;
+EOSQL

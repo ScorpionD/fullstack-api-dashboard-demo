@@ -1,0 +1,29 @@
+{
+  "name": "fullstack-dashboard-gateway",
+  "main": "index.mjs",
+  "compatibility_date": "2026-09-01",
+  "workers_dev": false,
+  "preview_urls": false,
+  "observability": {
+    "enabled": false
+  },
+  "vars": {
+    "PUBLIC_ORIGIN": "https://fullstack-api-dashboard-demo.pages.dev"
+  },
+  "ratelimits": [
+    {
+      "name": "EDGE_RATE",
+      "namespace_id": "810249",
+      "simple": {
+        "limit": 120,
+        "period": 60
+      }
+    }
+  ],
+  "vpc_services": [
+    {
+      "binding": "PRIVATE_API",
+      "service_id": "01a08fdf-8729-7a93-8db3-435e33e5fa08"
+    }
+  ]
+}

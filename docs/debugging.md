@@ -1,0 +1,13 @@
+# Five debugging cases
+
+The final main branch contains corrected application code. A separate, explicitly labelled reproduction branch demonstrates intentionally introduced bugs; it is never deployed to Pages or the API. Fix commits and the actual regression-run results are recorded here after verification.
+
+| Case | Regression | Correct behavior | Tests |
+| --- | --- | --- | --- |
+| API mapping | Database field names used as frontend keys | Explicit mapping of customer metadata and integer monetary cents | `tests/contracts.test.ts`, real API order CRUD |
+| Session expiry | Row existence treated as authentication | Expiry checked on every request; 401 for expired sessions | Contract and API expiry tests |
+| Loading/error | Rejection leaves spinner active | Error finishes loading; retry recovers; stale requests cancelled | React failure/retry/stale response tests |
+| Pagination/filter | Later page preserved after result set shrinks | Client resets page, backend clamps and keeps totals consistent | Contract, React and real database filtering tests |
+| Validation | Zero, negative or fractional cents accepted | Positive bounded integer schema plus PostgreSQL constraints | Parameterized invalid-amount tests and real failed update |
+
+The debugging casebook in the UI summarizes these examples. The Integration Lab's timeout/bad-response controls are safe adapter simulations, not broken authentication, validation or production branches.
